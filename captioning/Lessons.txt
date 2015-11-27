@@ -1,0 +1,10 @@
+Lessons learned
+1. Use dropout regularization as opposed to l2 regularization: l2 regularization really confuses the model.
+2. Input the image features once (at the initial time step) as opposed to at every time step. Model converges significantly faster, and rather than making image features carry more "weight", just confuses the model.
+3. Use RMSProp over adagrad.
+4. Use RMSProp over all model parameters jointly, i.e. over the LSTM network and word embedding table and softmax layer, rather than RMS prop for lstm network/softmax and simple SGD for word embeddings. 
+5. Separate the recurrent neural network architecture from your input transformation architecture (word embeddings) and run grad checks on all your modules to make sure there are no bugs.
+6. Torch specific: zero out gradients on every call, check for null, and let each module return its neural network architecture in an array, and then for optimization add each module to a nn.Parallel() net. Then call getParameters() to get parameters, grad_parameters and run RMS prop on that.
+6. Word embedding initializations do not make a difference. Uniform initialization between -0.05 and 0.05 works fine.
+7. Word + image feature concatenation converges slower than image features at first time step and then language model over embeddings (did not look into this more fully).
+8. The bigger the model, the more significant the GPU speedup. On small input sizes < 1m parameters speedup is neglible (about 10% speedup as opposed to 300% for 4m or greater).

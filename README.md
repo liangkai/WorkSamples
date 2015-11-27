@@ -1,1 +1,0 @@
-This repository contains excerpts of the code/work samples that I have done during my research, personal projects, etc.
